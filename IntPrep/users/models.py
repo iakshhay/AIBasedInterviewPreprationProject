@@ -39,3 +39,25 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+    
+class Skill(models.Model):
+    name=models.CharField(max_length=50,unique=True)
+
+    def __str__(self):
+        return self.name
+    
+class Profile(models.Model):
+    TARGET_ROLES=(
+        ("backend","Backend"),
+        ("frontend","Frontend"),
+        ("full_stack","Full stack")
+    )
+
+    user=models.OneToOneField(User,related_name='profile',on_delete=models.CASCADE)
+    bio=models.TextField(blank=True)
+    target_role=models.CharField(max_length=20,choices=TARGET_ROLES)
+    target_companies=models.CharField(max_length=255,blank=True)
+    skills=models.ManyToManyField(Skill,related_name='profiles',blank=True)
+
+    def __str__(self):
+        return self.user.email
